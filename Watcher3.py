@@ -8,7 +8,7 @@ class MyHandler(FileSystemEventHandler):
     def on_modified(self, event):
         if not event.is_directory:
             print(f'File {event.src_path} has been changed. Reloading...')
-            subprocess.run(['python', 'Second.py'])
+            subprocess.run(['python', 'dummy.py'])
 
 event_handler = MyHandler()
 observer = Observer()
