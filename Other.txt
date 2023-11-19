@@ -1,0 +1,9 @@
+ 
+ 
+ # in case Image resize dont work
+ if filename:
+        # img = Image.open(filename)
+        # img.thumbnail((190, 190))
+        # photo2 = ImageTk.PhotoImage(img)
+        # label.configure(image=photo2)
+        # label.image = photo2

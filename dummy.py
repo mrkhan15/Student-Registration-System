@@ -1,5 +1,6 @@
 from customtkinter import *
 from customtkinter.windows import CTk
+from customtkinter import CTkLabel
 import tkinter as tk
 import pathlib
 from datetime import date
@@ -10,6 +11,7 @@ from tkinter.ttk import Combobox
 import openpyxl, xlrd
 from openpyxl import Workbook
 from customtkinter import CTkFont
+
 
 
 app = CTk()
@@ -71,13 +73,27 @@ search_button_image = PhotoImage(file="search_icon.png")
 search_button = CTkButton(search_container, image=search_button_image, text=" ", fg_color='#c0c9fe', width=20, height=20, command=perform_search)
 search_button.pack(side="left")
 
-#Registration
+#Registration -- It will check the data of last row and add 1 to the reg no.
 
+def registration_no():
+    file=openpyxl.load_workbook('Dummy_data4.xlsx')
+    sheet=file.active
+    row=sheet.max_row
+
+    max_row_Value=sheet.cell(row=row, column=1).value
+
+    try:
+        Registration.set(max_row_Value+1)
+    except:
+        Registration.set('1')
+    
 CTkLabel(app, text="Registration No:", font=font, ).place(x=30,y=150)
 
 Registration=StringVar()
 reg_entry= CTkEntry(app, textvariable=Registration, width=80, font=font)
 reg_entry.place(x=160, y=150)
+
+registration_no()
 
 
 #Date 
@@ -175,31 +191,117 @@ PrvSchool=StringVar()
 PrvSchool_entry = CTkEntry(label3, textvariable=PrvSchool, width=150, font=font)
 PrvSchool_entry.place(x=630, y=100)
 
-#Image
-f=CTkFrame(app, width=200, height=200,)
+#Image Section
+
+# f = CTkLabel(app, width=200, height=200)
+# f.place(x=1000, y=150)
+
+f=CTkFrame(app, width=200, height=200)
 f.place(x=1000, y=150)
 
-profile_image = PhotoImage(file="Images/upload photo.png")
+profile_image = PhotoImage(file="Images/upload holder.png")
 profile = CTkLabel(f,text='', image=profile_image)
 profile.place(x=0, y=0)
 
-#Buttons
+#Buttons------------------->
 
-Ubutton = CTkButton(app, text="Upload", corner_radius=32, fg_color='#2A409A', hover_color='#c0c9fe')
-Ubutton.place(x=1000, y=370)
+#Show Image
 
-Savebutton = CTkButton(app, text="Save", corner_radius=32, fg_color='green', hover_color='#c0c9fe')
+# def showimage():
+#     global filename
+#     global img
+#     filename = filedialog.askopenfilename(
+#         initialdir=os.getcwd(),
+#         title="Select the Image File",
+#         filetypes=(("JPG File", "*.jpg"), ("PNG File", "*.png"), ("All Files", "*.*"))
+#     )
+
+#     img = (Image.open(filename))
+#     resized_image= img.resize((190,190))
+#     photo2 = ImageTk.PhotoImage(resized_image)
+#     f.config(image=photo2)
+#     f.image=photo2
+
+# Testing..........
+
+
+def show_image():
+    global filename
+    global img
+    filename = filedialog.askopenfilename(
+        initialdir=os.getcwd(),
+        title="Select the Image File",
+        filetypes=(("JPG File", "*.jpg"), ("PNG File", "*.png"), ("All Files", "*.*"))
+    )
+
+    if filename:        
+        img = Image.open(filename)
+        resized_image =img.resize((200, 200))
+        photo2 = ImageTk.PhotoImage(resized_image)
+        label.configure(image=photo2)
+        label.image = photo2
+
+
+
+
+
+label = CTkLabel(f, text='')
+label.place(x=0, y=0)
+
+upload_button = CTkButton(app, text="Upload", corner_radius=32, fg_color='#2A409A', hover_color='#c0c9fe', command=show_image)
+upload_button.place(x=1000, y=370)
+
+
+# Testing.......... END
+
+
+
+# Ubutton = CTkButton(app, text="Upload", corner_radius=32, fg_color='#2A409A', hover_color='#c0c9fe', command=showimage)
+# Ubutton.place(x=1000, y=370)
+
+def Save():
+    R1=Registration.get()
+    N1=Name.get()
+    try:
+        G1=radio
+    except:
+        messagebox.showerror("ERROR!","Please Select Gender")
+    # C1=Class.get()
+
+Savebutton = CTkButton(app, text="Save", corner_radius=32, fg_color='green', hover_color='#c0c9fe', command=Save)
 Savebutton.place(x=1000, y=450)
 
-Resetbutton = CTkButton(app, text="Reset", corner_radius=32, fg_color='grey',hover_color='#c0c9fe')
+#Clear Button 
+
+def clear():
+    Name.set('')
+    DOB.set('')
+    Degree.set('')
+    Major.set("")
+    Email.set('')
+    Contact.set('')
+    Address.set('')
+    FatherName.set('')
+    PrvSchool.set('')
+    # radiobutton_event.set(None)
+
+    # Savebutton.configure(state='normal')
+
+    #image resest
+    img1= PhotoImage(file='Images/upload holder.png')
+    label.configure(image=img1)
+    label.image=img1
+
+    
+Resetbutton = CTkButton(app, text="Reset", corner_radius=32, fg_color='grey',hover_color='#c0c9fe', command=clear)
 Resetbutton.place(x=1000, y=530)
 
 Exitbutton = CTkButton(app, text="Exit", command=exit, corner_radius=32, fg_color='red', hover_color='#c0c9fe' )
 Exitbutton.place(x=1000, y=610)
 
-
 #EXIT Switch
 def exit():
     app.destroy()
+
 
 app.mainloop()
