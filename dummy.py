@@ -228,22 +228,32 @@ profile_label.place(x=0, y=0)
 upload_button = CTkButton(app, text="Upload", corner_radius=32, fg_color='#2A409A', hover_color='#c0c9fe', command=show_image)
 upload_button.place(x=1000, y=370)
 
+def Save():
+    R1=Registration.get()
+    N1=Name.get()
+    
+    if radio.get() == 0:
+        messagebox.showerror("ERROR!", "Please Select Gender")
+    
+    
+    D1=Degree.get()
+    M1=Major.get()
+    E1=Email.get()
+    C1=Contact.get()
+    A1=Address.get()
+    F1=FatherName.get()
+    P1=PrvSchool.get()
+
+    if R1=='' or N1=='' or D1=='' or M1=='' or E1=='' or C1=='' or A1=='' or F1=='' or P1=='':
+        messagebox.showerror("ERROR!", "Few Data is missing.")
+    else:
+        file=openpyxl.load_workbook('Dummy_data4.xlsx')
+    
+    print(R1)
+    
 
 
-# Ubutton = CTkButton(app, text="Upload", corner_radius=32, fg_color='#2A409A', hover_color='#c0c9fe', command=showimage)
-# Ubutton.place(x=1000, y=370)
-
-# def Save():
-#     R1=Registration.get()
-#     N1=Name.get()
-#     try:
-#         G1=radio
-#     except:
-#         messagebox.showerror("ERROR!","Please Select Gender")
-#     # C1=Class.get()
-
-# Savebutton = CTkButton(app, text="Save", corner_radius=32, fg_color='green', hover_color='#c0c9fe', command=Save)
-Savebutton = CTkButton(app, text="Save", corner_radius=32, fg_color='green', hover_color='#c0c9fe')
+Savebutton = CTkButton(app, text="Save", corner_radius=32, fg_color='green', hover_color='#c0c9fe', command=Save)
 Savebutton.place(x=1000, y=450)
 
 #Clear Button 
