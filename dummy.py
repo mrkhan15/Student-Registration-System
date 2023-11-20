@@ -21,6 +21,7 @@ app.geometry("500x400")
 
 
 
+
 #Save Data to Exel file
 file=pathlib.Path('Dummy_data4.xlsx')
 if file.exists():
@@ -193,37 +194,14 @@ PrvSchool_entry.place(x=630, y=100)
 
 #Image Section
 
-# f = CTkLabel(app, width=200, height=200)
-# f.place(x=1000, y=150)
-
 f=CTkFrame(app, width=200, height=200)
 f.place(x=1000, y=150)
 
 profile_image = PhotoImage(file="Images/upload holder.png")
-profile = CTkLabel(f,text='', image=profile_image)
-profile.place(x=0, y=0)
-
-#Buttons------------------->
+profile_label = CTkLabel(f, text='', image=profile_image, width=200, height=200)
+profile_label.place(x=0, y=0)
 
 #Show Image
-
-# def showimage():
-#     global filename
-#     global img
-#     filename = filedialog.askopenfilename(
-#         initialdir=os.getcwd(),
-#         title="Select the Image File",
-#         filetypes=(("JPG File", "*.jpg"), ("PNG File", "*.png"), ("All Files", "*.*"))
-#     )
-
-#     img = (Image.open(filename))
-#     resized_image= img.resize((190,190))
-#     photo2 = ImageTk.PhotoImage(resized_image)
-#     f.config(image=photo2)
-#     f.image=photo2
-
-# Testing..........
-
 
 def show_image():
     global filename
@@ -233,42 +211,39 @@ def show_image():
         title="Select the Image File",
         filetypes=(("JPG File", "*.jpg"), ("PNG File", "*.png"), ("All Files", "*.*"))
     )
-
+    
     if filename:        
         img = Image.open(filename)
-        resized_image =img.resize((200, 200))
+        resized_image =img.resize((300, 300))
         photo2 = ImageTk.PhotoImage(resized_image)
-        label.configure(image=photo2)
+        profile_label.configure(image=photo2)
+        # label.configure(image=photo2)
         label.image = photo2
 
+# profile_label = CTkLabel(f, text='')
+profile_label.place(x=0, y=0)
 
-
-
-
-label = CTkLabel(f, text='')
-label.place(x=0, y=0)
+#Buttons------------------->
 
 upload_button = CTkButton(app, text="Upload", corner_radius=32, fg_color='#2A409A', hover_color='#c0c9fe', command=show_image)
 upload_button.place(x=1000, y=370)
-
-
-# Testing.......... END
 
 
 
 # Ubutton = CTkButton(app, text="Upload", corner_radius=32, fg_color='#2A409A', hover_color='#c0c9fe', command=showimage)
 # Ubutton.place(x=1000, y=370)
 
-def Save():
-    R1=Registration.get()
-    N1=Name.get()
-    try:
-        G1=radio
-    except:
-        messagebox.showerror("ERROR!","Please Select Gender")
-    # C1=Class.get()
+# def Save():
+#     R1=Registration.get()
+#     N1=Name.get()
+#     try:
+#         G1=radio
+#     except:
+#         messagebox.showerror("ERROR!","Please Select Gender")
+#     # C1=Class.get()
 
-Savebutton = CTkButton(app, text="Save", corner_radius=32, fg_color='green', hover_color='#c0c9fe', command=Save)
+# Savebutton = CTkButton(app, text="Save", corner_radius=32, fg_color='green', hover_color='#c0c9fe', command=Save)
+Savebutton = CTkButton(app, text="Save", corner_radius=32, fg_color='green', hover_color='#c0c9fe')
 Savebutton.place(x=1000, y=450)
 
 #Clear Button 
@@ -288,9 +263,9 @@ def clear():
     # Savebutton.configure(state='normal')
 
     #image resest
-    img1= PhotoImage(file='Images/upload holder.png')
-    label.configure(image=img1)
-    label.image=img1
+    # img1= PhotoImage(file='Images/upload holder.png')
+    # label.configure(image=img1)
+    # label.image=img1
 
     
 Resetbutton = CTkButton(app, text="Reset", corner_radius=32, fg_color='grey',hover_color='#c0c9fe', command=clear)
