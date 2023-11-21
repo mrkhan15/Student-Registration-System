@@ -23,8 +23,6 @@ app.geometry("500x400")
 # set_widget_scaling(1.5)
 
 
-
-
 #Save Data to Exel file
 file=pathlib.Path('Dummy_data4.xlsx')
 if file.exists():
@@ -230,6 +228,26 @@ profile_label.place(x=0, y=0)
 
 #Buttons------------------->
 
+#Clear Button function 
+def clear():
+    Name.set('')
+    DOB.set('')
+    Degree.set('')
+    Major.set("")
+    Email.set('')
+    Contact.set('')
+    Address.set('')
+    FatherName.set('')
+    PrvSchool.set('')
+    # radiobutton_event.set(None)
+
+    # Savebutton.configure(state='normal')
+
+    # Reload default image
+    default_image = PhotoImage(file="Images/upload holder.png")
+    profile_label.configure(image=default_image)
+    profile_label.image = default_image
+
 upload_button = CTkButton(app, text="Upload", corner_radius=32, fg_color='#2A409A', hover_color='#c0c9fe', command=show_image)
 upload_button.place(x=1000, y=370)
 
@@ -273,7 +291,7 @@ def Save():
         registration_no(Registration)
 
 
-        # clear() #Clear entry box 
+        clear() #Clear the entire form after Saving the Data.
 
 
 ########### Need to fix The gender check before wined up.!!!!!!!!!!!!!!!
@@ -287,26 +305,6 @@ Savebutton = CTkButton(app, text="Save", corner_radius=32, fg_color='green', hov
 Savebutton.place(x=1000, y=450)
 
 #Clear Button 
-
-def clear():
-    Name.set('')
-    DOB.set('')
-    Degree.set('')
-    Major.set("")
-    Email.set('')
-    Contact.set('')
-    Address.set('')
-    FatherName.set('')
-    PrvSchool.set('')
-    # radiobutton_event.set(None)
-
-    # Savebutton.configure(state='normal')
-
-    #image resest
-    # img1= PhotoImage(file='Images/upload holder.png')
-    # label.configure(image=img1)
-    # label.image=img1
-
     
 Resetbutton = CTkButton(app, text="Reset", corner_radius=32, fg_color='grey',hover_color='#c0c9fe', command=clear)
 Resetbutton.place(x=1000, y=530)
