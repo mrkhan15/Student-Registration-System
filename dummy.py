@@ -16,7 +16,7 @@ from customtkinter import CTkFont
 
 app = CTk()
 app.title("Student Registration System")
-# set_appearance_mode("System")
+# set_appearance_mode("System") ---> Change Dark mode or Light mode accordingly.
 app.geometry("500x400")
 
 deactivate_automatic_dpi_awareness()
@@ -72,7 +72,7 @@ def clear():
     # Savebutton.configure(state='normal')
 
     # Reload default image
-    default_image = PhotoImage(file="Images/upload holder.png")
+    default_image = PhotoImage(file="Images/Upload pic.png")
     profile_label.configure(image=default_image)
     profile_label.image = default_image
 
@@ -175,7 +175,7 @@ date_entry = CTkEntry(app, textvariable=Date, width=80, font=font)
 date_entry.place(x=550, y=150)
 Date.set(d1)
 
-#Student Details ------>
+#Student Details | Label 2 ----------->
 
 label2 = CTkLabel(app, font=font,text="", width=900, height=250,  fg_color='#c0c9fe')
 label2.place(x=30, y=200)
@@ -232,7 +232,7 @@ Email=StringVar()
 Email_entry = CTkEntry(label2, textvariable=Email, width=150, font=font)
 Email_entry.place(x=630, y=150)
 
-#Other Details
+#Other Details | Label 3 ----------->
 
 label3 = CTkLabel(app, font=font,text="", width=900, height=250,  fg_color='#c0c9fe')
 label3.place(x=30, y=470)
@@ -267,7 +267,7 @@ PrvSchool_entry.place(x=630, y=100)
 f=CTkFrame(app, width=200, height=200)
 f.place(x=1000, y=150)
 
-profile_image = PhotoImage(file="Images/upload holder.png")
+profile_image = PhotoImage(file="Images/Upload pic.png")
 profile_label = CTkLabel(f, text='', image=profile_image, width=200, height=200)
 profile_label.place(x=0, y=0)
 
