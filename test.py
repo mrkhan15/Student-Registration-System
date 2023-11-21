@@ -26,7 +26,7 @@ app.geometry("500x400")
 
 
 #Save Data to Exel file
-file=pathlib.Path('Dummy_data4.xlsx')
+file=pathlib.Path('Test_data.xlsx')
 if file.exists():
     pass
 else:
@@ -44,7 +44,7 @@ else:
     sheet['J1']='Previous School/ Instituion'
     sheet['K1']='Gender'
 
-    file.save('Dummy_data4.xlsx')
+    file.save('Test_data.xlsx')
 
 
 # Adjust family and size as needed
@@ -76,10 +76,12 @@ search_button_image = PhotoImage(file="search_icon.png")
 search_button = CTkButton(search_container, image=search_button_image, text=" ", fg_color='#c0c9fe', width=20, height=20, command=perform_search)
 search_button.pack(side="left")
 
+#Registration -- It will check the data of last row and add 1 to the reg no.
+
 # Registration -- It will check the data of last row and add 1 to the reg no.
 def registration_no(registration_var):
     try:
-        file = openpyxl.load_workbook('Dummy_data4.xlsx')
+        file = openpyxl.load_workbook('Test_Data.xlsx')
         sheet = file.active
         row = sheet.max_row
         max_row_value = sheet.cell(row=row, column=1).value
@@ -100,8 +102,26 @@ reg_entry.place(x=160, y=150)
 registration_no(Registration)
 
 
-#Date --------->
- 
+# def registration_no():
+#     file=openpyxl.load_workbook('Test_data.xlsx')
+#     sheet=file.active
+#     row=sheet.max_row
+#     max_row_value=sheet.cell(row=row, column=1).value
+
+#     try:
+#         Registration.set(max_row_value+1)
+#     except:
+#         Registration.set('1')
+    
+# CTkLabel(app, text="Registration No:", font=font, ).place(x=30,y=150)
+
+# Registration=StringVar()
+# reg_entry= CTkEntry(app, textvariable=Registration, width=80, font=font)
+# reg_entry.place(x=160, y=150)
+
+# registration_no()
+
+#Date 
 Date=StringVar()
 CTkLabel(app, text="Date:", font=font).place(x=500,y=150)
 today=date.today()
@@ -110,7 +130,7 @@ date_entry = CTkEntry(app, textvariable=Date, width=80, font=font)
 date_entry.place(x=550, y=150)
 Date.set(d1)
 
-#Student Details ------>
+#Student Details
 
 label2 = CTkLabel(app, font=font,text="", width=900, height=250,  fg_color='#c0c9fe')
 label2.place(x=30, y=200)
@@ -248,7 +268,7 @@ def Save():
     if R1=='' or N1=='' or D1=='' or B1=='' or M1=='' or E1=='' or C1=='' or A1=='' or F1=='' or P1=='':
         messagebox.showerror("ERROR!", "Few Data is missing.")
     else:
-        file=openpyxl.load_workbook('Dummy_data4.xlsx')
+        file=openpyxl.load_workbook('Test_data.xlsx')
         sheet=file.active
         sheet.cell(column=1, row=sheet.max_row+1, value=R1)
         sheet.cell(column=2, row=sheet.max_row, value=N1)
@@ -261,7 +281,7 @@ def Save():
         sheet.cell(column=9, row=sheet.max_row, value=F1)
         sheet.cell(column=10, row=sheet.max_row, value=P1)
 
-        file.save('Dummy_data4.xlsx')
+        file.save('Test_data.xlsx')
 
         try:
             img.save("Student Images/"+str(R1)+".png")
@@ -269,9 +289,8 @@ def Save():
             messagebox.showinfo("INFO!", "Profile picture is not available")
 
         messagebox.showinfo("SUCESSFUL!", "Data has been stored Sucessfully")
-
+        
         registration_no(Registration)
-
 
         # clear() #Clear entry box 
 
