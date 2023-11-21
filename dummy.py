@@ -19,8 +19,8 @@ app.title("Student Registration System")
 # set_appearance_mode("System")
 app.geometry("500x400")
 
-# Activate this if using in Monitor screen "Set your own scaling factor for widget dimensions and text size"
-# set_widget_scaling(1.5)
+deactivate_automatic_dpi_awareness()
+set_widget_scaling(1.5)
 
 
 #Save Data to Exel file

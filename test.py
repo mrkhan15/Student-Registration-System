@@ -19,8 +19,8 @@ app.title("Student Registration System")
 # set_appearance_mode("System")
 app.geometry("500x400")
 
-# Activate this if using in Monitor screen "Set your own scaling factor for widget dimensions and text size"
-# set_widget_scaling(1.5)
+deactivate_automatic_dpi_awareness()
+set_widget_scaling(1.5)
 
 
 #Save Data to Exel file
@@ -101,11 +101,22 @@ registration_no(Registration)
 
 # Create a button to trigger the search action
 
+# Add this global variable at the beginning of your code
+is_searching = False
+
+# Modify your perform_search function
 def perform_search():
+    global is_searching
+
     try:
         text = search_entry.get()
         clear()
         print(f"Performing search for: {text}")
+
+        # Set the global variable to True to indicate that a search is in progress
+        is_searching = True
+
+        # Disable the Save button
         Savebutton.configure(state='disable')
 
         file = load_workbook("Test_Data.xlsx")
@@ -138,6 +149,7 @@ def perform_search():
                     # ... (Update other fields similarly)
 
                     print(f"Data found for registration number {text}")
+
                     return  # Exit the loop once data is found
 
             # If the loop completes without finding data
@@ -153,6 +165,12 @@ def perform_search():
     except Exception as e:
         print(f"An error occurred: {e}")
         messagebox.showerror("Error", "An error occurred while searching")
+    finally:
+        # Reset the global variable to False after the search is complete
+        is_searching = False
+        # Enable the Save button
+        Savebutton.configure(state='normal')
+
 
 
 # Search bar
