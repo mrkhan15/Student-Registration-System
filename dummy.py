@@ -9,7 +9,7 @@ from PIL import Image, ImageTk
 import os
 from tkinter.ttk import Combobox
 import openpyxl, xlrd
-from openpyxl import Workbook
+from openpyxl import Workbook, load_workbook
 from customtkinter import CTkFont
 
 
@@ -56,12 +56,79 @@ label.pack(fill=X)
 main_view = CTkFrame(master=app,  corner_radius=0,)
 main_view.pack(side="top")
 
+#Clear Button function 
+def clear():
+    Name.set('')
+    DOB.set('')
+    Degree.set('')
+    Major.set("")
+    Email.set('')
+    Contact.set('')
+    Address.set('')
+    FatherName.set('')
+    PrvSchool.set('')
+    # radiobutton_event.set(None)
+
+    # Savebutton.configure(state='normal')
+
+    # Reload default image
+    default_image = PhotoImage(file="Images/upload holder.png")
+    profile_label.configure(image=default_image)
+    profile_label.image = default_image
 
 # Create a button to trigger the search action
 def perform_search():
-    query = search_entry.get()
-    # Add your search logic here
-    print(f"Performing search for: {query}")
+    try:
+        text = search_entry.get()
+        clear()
+        print(f"Performing search for: {text}")
+        Savebutton.configure(state='disable')
+
+        file = load_workbook("Dummy_data4.xlsx")
+        sheet = file.active
+
+        # Find the column index for "Registration No." header
+        registration_number_col = None
+        for col_index, col in enumerate(sheet.iter_cols(min_row=1, max_row=1), 1):
+            if col[0].value == "Registration No.":
+                registration_number_col = col_index
+                break
+
+        if registration_number_col is not None:
+            print(f"Found 'Registration number' column at index: {registration_number_col}")
+
+            # Iterate over rows starting from the second row
+            for row in sheet.iter_rows(min_row=2):
+                reg_number_cell = row[registration_number_col - 1]  # Adjusting for 0-based index
+                if str(reg_number_cell.value) == str(text):
+                    # Assuming you have labels for displaying data
+                    Name.set(row[1].value)   # Full Name
+                    DOB.set(row[2].value)    # Date of Birth
+                    Degree.set(row[3].value)  # Degree
+                    Major.set(row[4].value)   # Major
+                    Email.set(row[5].value)   # Email
+                    Contact.set(row[6].value)  # Contact
+                    Address.set(row[7].value)  # Address
+                    FatherName.set(row[8].value)  # Father's Name
+                    PrvSchool.set(row[9].value)   # Previous School
+                    # ... (Update other fields similarly)
+
+                    print(f"Data found for registration number {text}")
+                    return  # Exit the loop once data is found
+
+            # If the loop completes without finding data
+            print(f"No data found for the given registration number {text}")
+            messagebox.showerror("Error", f"No data found for the given registration number {text}")
+        else:
+            print("Column 'Registration number' not found in the Excel sheet")
+            messagebox.showerror("Error", "Column 'Registration number' not found in the Excel sheet")
+
+    except FileNotFoundError as e:
+        print(f"File not found: {e}")
+        messagebox.showerror("Error", "File not found")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        messagebox.showerror("Error", "An error occurred while searching")
 
 # Search bar
 search_container = CTkFrame(master=main_view, height=50, fg_color="#F0F0F0")
@@ -228,26 +295,6 @@ profile_label.place(x=0, y=0)
 
 #Buttons------------------->
 
-#Clear Button function 
-def clear():
-    Name.set('')
-    DOB.set('')
-    Degree.set('')
-    Major.set("")
-    Email.set('')
-    Contact.set('')
-    Address.set('')
-    FatherName.set('')
-    PrvSchool.set('')
-    # radiobutton_event.set(None)
-
-    # Savebutton.configure(state='normal')
-
-    # Reload default image
-    default_image = PhotoImage(file="Images/upload holder.png")
-    profile_label.configure(image=default_image)
-    profile_label.image = default_image
-
 upload_button = CTkButton(app, text="Upload", corner_radius=32, fg_color='#2A409A', hover_color='#c0c9fe', command=show_image)
 upload_button.place(x=1000, y=370)
 
@@ -298,14 +345,14 @@ def Save():
     # if radio.get() == 0:
     #     messagebox.showerror("ERROR!", "Please Select Gender")
     # print(R1)
-    
+
+### Sea  
 
 
 Savebutton = CTkButton(app, text="Save", corner_radius=32, fg_color='green', hover_color='#c0c9fe', command=Save)
 Savebutton.place(x=1000, y=450)
 
-#Clear Button 
-    
+#Clear Button     
 Resetbutton = CTkButton(app, text="Reset", corner_radius=32, fg_color='grey',hover_color='#c0c9fe', command=clear)
 Resetbutton.place(x=1000, y=530)
 

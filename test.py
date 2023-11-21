@@ -9,7 +9,7 @@ from PIL import Image, ImageTk
 import os
 from tkinter.ttk import Combobox
 import openpyxl, xlrd
-from openpyxl import Workbook
+from openpyxl import Workbook, load_workbook
 from customtkinter import CTkFont
 
 
@@ -23,10 +23,8 @@ app.geometry("500x400")
 # set_widget_scaling(1.5)
 
 
-
-
 #Save Data to Exel file
-file=pathlib.Path('Test_data.xlsx')
+file=pathlib.Path('Test_Data.xlsx')
 if file.exists():
     pass
 else:
@@ -44,7 +42,7 @@ else:
     sheet['J1']='Previous School/ Instituion'
     sheet['K1']='Gender'
 
-    file.save('Test_data.xlsx')
+    file.save('Test_Data.xlsx')
 
 
 # Adjust family and size as needed
@@ -58,25 +56,25 @@ label.pack(fill=X)
 main_view = CTkFrame(master=app,  corner_radius=0,)
 main_view.pack(side="top")
 
+#Clear Button function 
+def clear():
+    Name.set('')
+    DOB.set('')
+    Degree.set('')
+    Major.set("")
+    Email.set('')
+    Contact.set('')
+    Address.set('')
+    FatherName.set('')
+    PrvSchool.set('')
+    # radiobutton_event.set(None)
 
-# Create a button to trigger the search action
-def perform_search():
-    query = search_entry.get()
-    # Add your search logic here
-    print(f"Performing search for: {query}")
+    # Savebutton.configure(state='normal')
 
-# Search bar
-search_container = CTkFrame(master=main_view, height=50, fg_color="#F0F0F0")
-search_container.pack(fill="x")
-
-search_entry = CTkEntry(master=search_container, width=305, placeholder_text="Search", border_color="#c0c9fe", border_width=2)
-search_entry.pack(side="left")
-
-search_button_image = PhotoImage(file="search_icon.png")
-search_button = CTkButton(search_container, image=search_button_image, text=" ", fg_color='#c0c9fe', width=20, height=20, command=perform_search)
-search_button.pack(side="left")
-
-#Registration -- It will check the data of last row and add 1 to the reg no.
+    # Reload default image
+    default_image = PhotoImage(file="Images/upload holder.png")
+    profile_label.configure(image=default_image)
+    profile_label.image = default_image
 
 # Registration -- It will check the data of last row and add 1 to the reg no.
 def registration_no(registration_var):
@@ -101,27 +99,75 @@ reg_entry.place(x=160, y=150)
 
 registration_no(Registration)
 
+# Create a button to trigger the search action
 
-# def registration_no():
-#     file=openpyxl.load_workbook('Test_data.xlsx')
-#     sheet=file.active
-#     row=sheet.max_row
-#     max_row_value=sheet.cell(row=row, column=1).value
+def perform_search():
+    try:
+        text = search_entry.get()
+        clear()
+        print(f"Performing search for: {text}")
+        Savebutton.configure(state='disable')
 
-#     try:
-#         Registration.set(max_row_value+1)
-#     except:
-#         Registration.set('1')
-    
-# CTkLabel(app, text="Registration No:", font=font, ).place(x=30,y=150)
+        file = load_workbook("Test_Data.xlsx")
+        sheet = file.active
 
-# Registration=StringVar()
-# reg_entry= CTkEntry(app, textvariable=Registration, width=80, font=font)
-# reg_entry.place(x=160, y=150)
+        # Find the column index for "Registration No." header
+        registration_number_col = None
+        for col_index, col in enumerate(sheet.iter_cols(min_row=1, max_row=1), 1):
+            if col[0].value == "Registration No.":
+                registration_number_col = col_index
+                break
 
-# registration_no()
+        if registration_number_col is not None:
+            print(f"Found 'Registration number' column at index: {registration_number_col}")
 
-#Date 
+            # Iterate over rows starting from the second row
+            for row in sheet.iter_rows(min_row=2):
+                reg_number_cell = row[registration_number_col - 1]  # Adjusting for 0-based index
+                if str(reg_number_cell.value) == str(text):
+                    # Assuming you have labels for displaying data
+                    Name.set(row[1].value)   # Full Name
+                    DOB.set(row[2].value)    # Date of Birth
+                    Degree.set(row[3].value)  # Degree
+                    Major.set(row[4].value)   # Major
+                    Email.set(row[5].value)   # Email
+                    Contact.set(row[6].value)  # Contact
+                    Address.set(row[7].value)  # Address
+                    FatherName.set(row[8].value)  # Father's Name
+                    PrvSchool.set(row[9].value)   # Previous School
+                    # ... (Update other fields similarly)
+
+                    print(f"Data found for registration number {text}")
+                    return  # Exit the loop once data is found
+
+            # If the loop completes without finding data
+            print(f"No data found for the given registration number {text}")
+            messagebox.showerror("Error", f"No data found for the given registration number {text}")
+        else:
+            print("Column 'Registration number' not found in the Excel sheet")
+            messagebox.showerror("Error", "Column 'Registration number' not found in the Excel sheet")
+
+    except FileNotFoundError as e:
+        print(f"File not found: {e}")
+        messagebox.showerror("Error", "File not found")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        messagebox.showerror("Error", "An error occurred while searching")
+
+
+# Search bar
+search_container = CTkFrame(master=main_view, height=50, fg_color="#F0F0F0")
+search_container.pack(fill="x")
+
+search_entry = CTkEntry(master=search_container, width=305, placeholder_text="Search", border_color="#c0c9fe", border_width=2)
+search_entry.pack(side="left")
+
+search_button_image = PhotoImage(file="search_icon.png")
+search_button = CTkButton(search_container, image=search_button_image, text=" ", fg_color='#c0c9fe', width=20, height=20, command=perform_search)
+search_button.pack(side="left")
+
+#Date --------->
+ 
 Date=StringVar()
 CTkLabel(app, text="Date:", font=font).place(x=500,y=150)
 today=date.today()
@@ -130,7 +176,7 @@ date_entry = CTkEntry(app, textvariable=Date, width=80, font=font)
 date_entry.place(x=550, y=150)
 Date.set(d1)
 
-#Student Details
+#Student Details ------>
 
 label2 = CTkLabel(app, font=font,text="", width=900, height=250,  fg_color='#c0c9fe')
 label2.place(x=30, y=200)
@@ -268,7 +314,7 @@ def Save():
     if R1=='' or N1=='' or D1=='' or B1=='' or M1=='' or E1=='' or C1=='' or A1=='' or F1=='' or P1=='':
         messagebox.showerror("ERROR!", "Few Data is missing.")
     else:
-        file=openpyxl.load_workbook('Test_data.xlsx')
+        file=openpyxl.load_workbook('Test_Data.xlsx')
         sheet=file.active
         sheet.cell(column=1, row=sheet.max_row+1, value=R1)
         sheet.cell(column=2, row=sheet.max_row, value=N1)
@@ -281,7 +327,7 @@ def Save():
         sheet.cell(column=9, row=sheet.max_row, value=F1)
         sheet.cell(column=10, row=sheet.max_row, value=P1)
 
-        file.save('Test_data.xlsx')
+        file.save('Test_Data.xlsx')
 
         try:
             img.save("Student Images/"+str(R1)+".png")
@@ -289,53 +335,35 @@ def Save():
             messagebox.showinfo("INFO!", "Profile picture is not available")
 
         messagebox.showinfo("SUCESSFUL!", "Data has been stored Sucessfully")
-        
+
         registration_no(Registration)
 
-        # clear() #Clear entry box 
+
+        clear() #Clear the entire form after Saving the Data.
 
 
 ########### Need to fix The gender check before wined up.!!!!!!!!!!!!!!!
     # if radio.get() == 0:
     #     messagebox.showerror("ERROR!", "Please Select Gender")
     # print(R1)
-    
+
+### Sea  
 
 
 Savebutton = CTkButton(app, text="Save", corner_radius=32, fg_color='green', hover_color='#c0c9fe', command=Save)
 Savebutton.place(x=1000, y=450)
 
-#Clear Button 
-
-def clear():
-    Name.set('')
-    DOB.set('')
-    Degree.set('')
-    Major.set("")
-    Email.set('')
-    Contact.set('')
-    Address.set('')
-    FatherName.set('')
-    PrvSchool.set('')
-    # radiobutton_event.set(None)
-
-    # Savebutton.configure(state='normal')
-
-    #image resest
-    # img1= PhotoImage(file='Images/upload holder.png')
-    # label.configure(image=img1)
-    # label.image=img1
-
-    
+#Clear Button     
 Resetbutton = CTkButton(app, text="Reset", corner_radius=32, fg_color='grey',hover_color='#c0c9fe', command=clear)
 Resetbutton.place(x=1000, y=530)
-
-Exitbutton = CTkButton(app, text="Exit", command=exit, corner_radius=32, fg_color='red', hover_color='#c0c9fe' )
-Exitbutton.place(x=1000, y=610)
 
 #EXIT Switch
 def exit():
     app.destroy()
+
+Exitbutton = CTkButton(app, text="Exit", command=exit, corner_radius=32, fg_color='red', hover_color='#c0c9fe' )
+Exitbutton.place(x=1000, y=610)
+
 
 
 app.mainloop()
