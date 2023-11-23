@@ -1,0 +1,11 @@
+## Dependencies
+
+- [CustomTkinter](https://link-to-customtkinter): A custom extension of the Tkinter library.
+- [Tkinter](https://docs.python.org/3/library/tkinter.html): The standard Python interface to the Tk GUI toolkit.
+- [pathlib](https://docs.python.org/3/library/pathlib.html): A module for working with filesystem paths.
+- [datetime](https://docs.python.org/3/library/datetime.html): A module for working with dates and times.
+- [Pillow](https://pillow.readthedocs.io/en/stable/): A powerful library for opening, manipulating, and saving images.
+- [openpyxl](https://openpyxl.readthedocs.io/en/stable/): A library for reading and writing Excel files.
+- [xlrd](https://xlrd.readthedocs.io/en/latest/): A library for reading data and formatting information from Excel files.
+
+Make sure to install these dependencies before running the project. 

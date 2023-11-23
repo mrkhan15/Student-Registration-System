@@ -394,6 +394,7 @@ Resetbutton.place(x=1000, y=530)
 Exitbutton = CTkButton(app, text="Exit", command=exit, corner_radius=32, fg_color='red', hover_color='#c0c9fe' )
 Exitbutton.place(x=1000, y=610)
 
+
 #EXIT Switch
 def exit():
     app.destroy()
