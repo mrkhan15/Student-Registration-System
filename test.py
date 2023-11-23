@@ -76,49 +76,13 @@ def clear():
     profile_label.configure(image=default_image)
     profile_label.image = default_image
 
-# Registration -- It will check the data of last row and add 1 to the reg no.
-def registration_no(registration_var):
-    try:
-        file = openpyxl.load_workbook('Test_Data.xlsx')
-        sheet = file.active
-        row = sheet.max_row
-        max_row_value = sheet.cell(row=row, column=1).value
-        reg_value = int(max_row_value) + 1
-        registration_var.set(reg_value)
-        file.close()  # Close the workbook
-    except Exception as e:
-        print(f"An error occurred: {e}")
-        registration_var.set('1')
-
-
-CTkLabel(app, text="Registration No:", font=font).place(x=30, y=150)
-
-Registration = StringVar()
-reg_entry = CTkEntry(app, textvariable=Registration, width=80, font=font)
-reg_entry.place(x=160, y=150)
-
-registration_no(Registration)
-
 # Create a button to trigger the search action
-
-# Add this global variable at the beginning of your code
-is_searching = False
-
-# Modify your perform_search function
 def perform_search():
-    global is_searching
-
     try:
         text = search_entry.get()
         clear()
         print(f"Performing search for: {text}")
-
-        # Set the global variable to True to indicate that a search is in progress
-        is_searching = True
-
-        # Disable the Save button
-        Savebutton.configure(state='disable')
-
+        
         file = load_workbook("Test_Data.xlsx")
         sheet = file.active
 
@@ -149,7 +113,6 @@ def perform_search():
                     # ... (Update other fields similarly)
 
                     print(f"Data found for registration number {text}")
-
                     return  # Exit the loop once data is found
 
             # If the loop completes without finding data
@@ -165,13 +128,6 @@ def perform_search():
     except Exception as e:
         print(f"An error occurred: {e}")
         messagebox.showerror("Error", "An error occurred while searching")
-    finally:
-        # Reset the global variable to False after the search is complete
-        is_searching = False
-        # Enable the Save button
-        Savebutton.configure(state='normal')
-
-
 
 # Search bar
 search_container = CTkFrame(master=main_view, height=50, fg_color="#F0F0F0")
@@ -183,6 +139,29 @@ search_entry.pack(side="left")
 search_button_image = PhotoImage(file="search_icon.png")
 search_button = CTkButton(search_container, image=search_button_image, text=" ", fg_color='#c0c9fe', width=20, height=20, command=perform_search)
 search_button.pack(side="left")
+
+# Registration -- It will check the data of last row and add 1 to the reg no.
+def registration_no(registration_var):
+    try:
+        file = openpyxl.load_workbook('Test_Data.xlsx')
+        sheet = file.active
+        row = sheet.max_row
+        max_row_value = sheet.cell(row=row, column=1).value
+        reg_value = int(max_row_value) + 1
+        registration_var.set(reg_value)
+        file.close()  # Close the workbook
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        registration_var.set('1')
+
+
+CTkLabel(app, text="Registration No:", font=font).place(x=30, y=150)
+
+Registration = StringVar()
+reg_entry = CTkEntry(app, textvariable=Registration, width=80, font=font)
+reg_entry.place(x=160, y=150)
+
+registration_no(Registration)
 
 
 #Date --------->
@@ -197,7 +176,7 @@ Date.set(d1)
 
 #Student Details | Label 2 ----------->
 
-label2 = CTkLabel(app, font=font,text="", width=900, height=250,  fg_color='#c0c9fe', corner_radius=22)
+label2 = CTkLabel(app, font=font,text="", width=900, height=250,  fg_color='#c0c9fe')
 label2.place(x=30, y=200)
 
 CTkLabel(label2, text="Full Name:", font=font, ).place(x=30,y=50)
@@ -254,7 +233,7 @@ Email_entry.place(x=630, y=150)
 
 #Other Details | Label 3 ----------->
 
-label3 = CTkLabel(app, font=font,text="", width=900, height=250,  fg_color='#c0c9fe', corner_radius=22)
+label3 = CTkLabel(app, font=font,text="", width=900, height=250,  fg_color='#c0c9fe')
 label3.place(x=30, y=470)
 
 
@@ -376,14 +355,12 @@ Savebutton.place(x=1000, y=450)
 Resetbutton = CTkButton(app, text="Reset", corner_radius=32, fg_color='grey',hover_color='#c0c9fe', command=clear)
 Resetbutton.place(x=1000, y=530)
 
+Exitbutton = CTkButton(app, text="Exit", command=exit, corner_radius=32, fg_color='red', hover_color='#c0c9fe' )
+Exitbutton.place(x=1000, y=610)
 
 #EXIT Switch
 def exit():
     app.destroy()
-
-Exitbutton = CTkButton(app, text="Exit", command=exit, corner_radius=32, fg_color='red', hover_color='#c0c9fe' )
-Exitbutton.place(x=1000, y=610)
-
 
 
 app.mainloop()
