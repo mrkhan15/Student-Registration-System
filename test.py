@@ -22,7 +22,6 @@ app.geometry("500x400")
 deactivate_automatic_dpi_awareness()
 set_widget_scaling(1.5)
 
-
 #Save Data to Exel file
 file=pathlib.Path('Test_Data.xlsx')
 if file.exists():
@@ -76,6 +75,29 @@ def clear():
     profile_label.configure(image=default_image)
     profile_label.image = default_image
 
+# Registration -- It will check the data of last row and add 1 to the reg no.
+def registration_no(registration_var):
+    try:
+        file = openpyxl.load_workbook('Test_Data.xlsx')
+        sheet = file.active
+        row = sheet.max_row
+        max_row_value = sheet.cell(row=row, column=1).value
+        reg_value = int(max_row_value) + 1
+        registration_var.set(reg_value)
+        file.close()  # Close the workbook
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        registration_var.set('1')
+
+
+CTkLabel(app, text="Registration No:", font=font).place(x=30, y=150)
+
+Registration = StringVar()
+reg_entry = CTkEntry(app, textvariable=Registration, width=80, font=font)
+reg_entry.place(x=160, y=150)
+
+registration_no(Registration)
+
 # Create a button to trigger the search action
 def perform_search():
     try:
@@ -110,11 +132,25 @@ def perform_search():
                     Address.set(row[7].value)  # Address
                     FatherName.set(row[8].value)  # Father's Name
                     PrvSchool.set(row[9].value)   # Previous School
-                    # ... (Update other fields similarly)
+
+                    #Retrieving Student Image
+                    # Get the image registration number from the Excel file
+                    image_registration_number = row[registration_number_col - 1].value
+                    # Construct the full path to the image
+                    image_path = os.path.join("Student Images", f"{image_registration_number}.png")
+
+                    # Display the image on the app
+                    if os.path.exists(image_path):
+                        img = Image.open(image_path)
+                        resized_image = img.resize((300, 300))
+                        photo2 = ImageTk.PhotoImage(resized_image)
+                        profile_label.configure(image=photo2)
+                        profile_label.image = photo2
+                    else:
+                        print(f"Image not found: {image_path}")
 
                     print(f"Data found for registration number {text}")
                     return  # Exit the loop once data is found
-
             # If the loop completes without finding data
             print(f"No data found for the given registration number {text}")
             messagebox.showerror("Error", f"No data found for the given registration number {text}")
@@ -140,28 +176,28 @@ search_button_image = PhotoImage(file="search_icon.png")
 search_button = CTkButton(search_container, image=search_button_image, text=" ", fg_color='#c0c9fe', width=20, height=20, command=perform_search)
 search_button.pack(side="left")
 
-# Registration -- It will check the data of last row and add 1 to the reg no.
-def registration_no(registration_var):
-    try:
-        file = openpyxl.load_workbook('Test_Data.xlsx')
-        sheet = file.active
-        row = sheet.max_row
-        max_row_value = sheet.cell(row=row, column=1).value
-        reg_value = int(max_row_value) + 1
-        registration_var.set(reg_value)
-        file.close()  # Close the workbook
-    except Exception as e:
-        print(f"An error occurred: {e}")
-        registration_var.set('1')
+# # Registration -- It will check the data of last row and add 1 to the reg no.
+# def registration_no(registration_var):
+#     try:
+#         file = openpyxl.load_workbook('Test_Data.xlsx')
+#         sheet = file.active
+#         row = sheet.max_row
+#         max_row_value = sheet.cell(row=row, column=1).value
+#         reg_value = int(max_row_value) + 1
+#         registration_var.set(reg_value)
+#         file.close()  # Close the workbook
+#     except Exception as e:
+#         print(f"An error occurred: {e}")
+#         registration_var.set('1')
 
 
-CTkLabel(app, text="Registration No:", font=font).place(x=30, y=150)
+# CTkLabel(app, text="Registration No:", font=font).place(x=30, y=150)
 
-Registration = StringVar()
-reg_entry = CTkEntry(app, textvariable=Registration, width=80, font=font)
-reg_entry.place(x=160, y=150)
+# Registration = StringVar()
+# reg_entry = CTkEntry(app, textvariable=Registration, width=80, font=font)
+# reg_entry.place(x=160, y=150)
 
-registration_no(Registration)
+# registration_no(Registration)
 
 
 #Date --------->

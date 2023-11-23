@@ -45,7 +45,7 @@ else:
     file.save('Student_Data.xlsx')
 
 
-# Adjust family and size as needed
+# Adjust Font family and size as needed
 font = CTkFont(family='Roboto', size=15, weight='bold')  
 
 #Top_Frames 
@@ -100,7 +100,7 @@ def perform_search():
             for row in sheet.iter_rows(min_row=2):
                 reg_number_cell = row[registration_number_col - 1]  # Adjusting for 0-based index
                 if str(reg_number_cell.value) == str(text):
-                    # Assuming you have labels for displaying data
+                    # Labels for displaying data
                     Name.set(row[1].value)   # Full Name
                     DOB.set(row[2].value)    # Date of Birth
                     Degree.set(row[3].value)  # Degree
@@ -110,7 +110,22 @@ def perform_search():
                     Address.set(row[7].value)  # Address
                     FatherName.set(row[8].value)  # Father's Name
                     PrvSchool.set(row[9].value)   # Previous School
-                    # ... (Update other fields similarly)
+                    
+                    #Retrieving Student Image
+                    # Get the image registration number from the Excel file
+                    image_registration_number = row[registration_number_col - 1].value
+                    # Construct the full path to the image
+                    image_path = os.path.join("Student Images", f"{image_registration_number}.png")
+
+                    # Display the image on the app
+                    if os.path.exists(image_path):
+                        img = Image.open(image_path)
+                        resized_image = img.resize((300, 300))
+                        photo2 = ImageTk.PhotoImage(resized_image)
+                        profile_label.configure(image=photo2)
+                        profile_label.image = photo2
+                    else:
+                        print(f"Image not found: {image_path}")
 
                     print(f"Data found for registration number {text}")
                     return  # Exit the loop once data is found
@@ -209,7 +224,7 @@ R1.place(x=150,y=150)
 
 R2 = CTkRadioButton(label2, text="Female", variable=radio,value=2,command=radiobutton_event)
 R2.place(x=250,y=150)
-##########
+
 
 CTkLabel(label2, text="Degree:", font=font, ).place(x=500,y=50)
 
@@ -289,7 +304,6 @@ def show_image():
         # label.configure(image=photo2)
         label.image = photo2
 
-# profile_label = CTkLabel(f, text='')
 profile_label.place(x=0, y=0)
 
 #Buttons------------------->
@@ -340,13 +354,6 @@ def Save():
         clear() #Clear the entire form after Saving the Data.
 
 
-########### Need to fix The gender check before wined up.!!!!!!!!!!!!!!!
-    # if radio.get() == 0:
-    #     messagebox.showerror("ERROR!", "Please Select Gender")
-    # print(R1)
-
-### Sea  
-
 
 Savebutton = CTkButton(app, text="Save", corner_radius=32, fg_color='green', hover_color='#c0c9fe', command=Save)
 Savebutton.place(x=1000, y=450)
@@ -358,7 +365,7 @@ Resetbutton.place(x=1000, y=530)
 Exitbutton = CTkButton(app, text="Exit", command=exit, corner_radius=32, fg_color='red', hover_color='#c0c9fe' )
 Exitbutton.place(x=1000, y=610)
 
-#EXIT Switch
+#EXIT Switch (Turns off the App)
 def exit():
     app.destroy()
 
